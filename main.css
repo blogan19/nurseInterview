@@ -1,0 +1,90 @@
+.textInput{
+	width: 100%;
+	border: none;
+	box-shadow: inset 1px 2px 4px rgba(0, 0, 0, 0.01), 0px 0px 8px rgba(0, 0, 0, 0.2);
+}
+body{
+	background-color: #fff;
+}
+.qBtn{
+	white-space: normal;
+	
+	border: solid 1px #A43931;
+	background:  #ffffff;
+	font-size: 16px;
+	color: #A43931;
+	height: auto;
+	line-height: 100%;
+}
+.qBtn:focus{
+	color: #3498db;
+}
+
+textarea{
+	border-radius: 5px;
+}
+a {
+  color:inherit;
+  text-decoration: none;
+ }
+.btn1{
+	color: #3498db;
+	border: solid 1px #3498db;
+	background: none;
+}
+.backBtn{
+	color: #3498db;
+	background-color: #ffffff; 
+}
+.floatL{
+	float: left;
+}
+.note{
+	display: none;
+	text-align: center;
+	background-color: #f5f5f5;
+	border: solid 1px #e3e3e3;
+	margin-top: 5px;
+	width: 80%;
+	margin-left: 10%;
+	border-radius: 5px;
+}
+.btnSave{
+	background-image: linear-gradient(to right, #76b852, #8DC26F);
+	color: white;
+}
+.btnDel{
+	background:  #ED213A;
+	color: white;
+}
+.invis{
+	display:  none;
+}
+.centre{
+	text-align: center;
+}
+.lbl{
+	text-align: center;
+	height: 30px;
+	line-height: 30px;
+	border-radius: 5px;
+	width: 100%;
+	margin-right: 10px;
+	margin-top: 5px;
+	background-color: yellow;
+}
+input[type="checkbox"]:checked + label{
+	background-color: red;
+}
+
+.navbar{
+	background-image: linear-gradient(to right, #0288D1,#0288D1);
+	border: none;
+}
+
+
+
+
+
+
+

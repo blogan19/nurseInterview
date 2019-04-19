@@ -1,0 +1,469 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title></title>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+	<link rel="stylesheet" href="bootstrap.min.css">
+	<script src="Jquery.js"></script>
+	<script src="bootstrap.min.js"></script>
+	<link href="toastr.css" rel="stylesheet"/>
+	<script src="toastr.js"></script>
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<link rel="stylesheet" type="text/css" href="main.css">
+
+	<style type="text/css">
+		
+		.glyphicon{
+			float: right;
+			margin-right: 10px;
+		}
+		.listHead{
+			text-align: center;
+			font-weight: bold;
+			border-bottom: solid 3px #A43931;
+		}
+		.btnAddNote{
+			width: 59%;
+			background-color: #ffffff;
+			border: solid black 0.5px;
+		}
+		.btnFav{
+			float: right;
+			width: 39%;
+			margin-left: 2%;
+		}
+		.listQ{
+			background-color: #f5f5f5;
+		}
+		.btn-deleteFav{
+			width: 30%;
+			margin-left: 70%;
+			color: red;
+			background: none;
+			border: solid red 1px;
+		}
+		.qRadio{
+			display: none;
+		}
+		.qRadio + label{
+			border-radius: 5px;
+		    font-size: 1em;
+		    background-color: #fff;
+		    padding: 10px 10px 10px 10px;
+		    box-shadow: inset 1px 2px 4px rgba(0, 0, 0, 0.01), 0px 0px 8px rgba(0, 0, 0, 0.2); 
+
+		}
+		.qRadio:checked + label{
+			color: white;
+  			background: #0288D1;
+		}
+	</style>
+</head>
+<body>
+<nav class="navbar navbar-inverse">
+  <div class="container-fluid">
+    <div class="navbar-header">
+     
+      <a class="navbar-brand" href="#">Nursing Interview Questions</a>
+
+    </div>
+    
+  </div>
+</nav>
+
+<div class="container">
+	<!--<input class="form-control" id="myInput" type="text" placeholder="Search..">-->
+	<div class="well">Add your own interview questions using the button below. You can also favourite questions you think may be most useful and add your own notes for each question</div>
+	<button type="button" class="btn btn-primary btn-block" data-toggle="modal" data-target="#addQModal">Add a Question</button>
+	<hr>
+	
+	<input class="qRadio" type="radio" name="radio" id="radioAll" checked onclick="loadQuestions('all')">
+	<label for="radioAll">All Questions</label>
+	<input class="qRadio" type="radio" name="radio" id="userQuestions" onclick="loadQuestions('my')">
+	<label for="userQuestions">My Questions</label>
+	<input class="qRadio" type="radio" name="radio" id="favQuestions" onclick="loadQuestions('fav')">
+	<label for="favQuestions">Favourites</label>
+	<hr>
+	<ul class="list-group" id="qContainer">
+	</ul>
+</div>
+
+
+
+
+
+<div id="addQModal" class="modal fade" role="dialog">
+  <div class="modal-dialog">
+    <!-- Modal content-->
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+        <h4 class="modal-title">Add Question</h4>
+      </div>
+      <div class="modal-body">
+        <input type="text" class="form-control textInput" placeholder="Question" id="newQInput"><br>	
+      </div>
+      <div class="modal-footer">
+      	<button type="button" class="btn btn-default" onclick="addQuestion()">Save</button>
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+
+
+
+<script type="text/javascript">
+
+	function getUserQ(){
+		var userQ = new Array;
+		var userQ_str = localStorage.getItem('storedUserQ');
+		if(userQ_str != null){
+			userQ = JSON.parse(userQ_str);
+		}
+		return userQ;
+	}
+	function getFavQ(){
+		var favourites = new Array;
+		var favourites_str = localStorage.getItem('savedFavourites');
+		if(favourites_str != null){
+			favourites = JSON.parse(favourites_str);
+		}
+		return favourites;
+	}
+	function getuserFavQ(){
+		var userFavourites = new Array;
+		var userFavourites_str = localStorage.getItem('savedUserFavourites');
+		if(userFavourites_str != null){
+			userFavourites = JSON.parse(userFavourites_str);
+		}
+		return userFavourites;
+	}
+	var q = ["Why did you decide on a career as a nurse?","What is the role of a nurse?","What do you find rewarding about being a nurse?","How has your nursing training prepared you?","Why do you want to work here?","How would you define a leader?","Why should we hire you?","Where do you see yourself in 5 years?","How do you envisage the role of the nurse changing in the future?","Where do you see yourself in healthcare in five years?","What are your long term career goals? ","How do you see the healthcare system evolving in the future(e.g. NHS)?","What impact do you see technology having on healthcare in the future?","What do you think are potential threats to the role of nurses?","Tell us about yourself.","Tell me what you feel your greatest skill as a nurse is?","How do you handle the stress of the job?","What's your most important professional achievement?","Who are your career role models and why?","What do you find is the hardest part about being a nurse?","Why are you the best nursing candidate for this position?","Why are you leaving your current position?","What do you think of your previous boss?","What did you like least about your last job?","Do you prefer to work alone or as part of a nursing team?","Would you describe yourself as an organised nurse?","What really motivates you?","When were you the happiest in your job?","What do you feel you contribute to your patients?","How would your friends describe you?","What is your worst trait?","How would you describe your ideal shift?","What professional organisations do you belong to?","Would you say you’re a team player?","Are you comfortable working with other doctors and nurses?","How would you resolve a disagreement within your team?","How would you lead a team in times of hardship for example winter pressures?","What other staff roles are you likely to encounter working as a nurse?","How you deal with someone who isn’t satisfied with your patient care?","Describe a time you had to deal with a difficult patient and how you handled that.","How would you handle a patient who complains?","What would you do if your replacement didn’t arrive?","How would you deal with a doctor who was rude to you in front of other members of staff?","You are asked to work a shift on an understaffed unit and you feel that you have too many patients to look after. How do you deal with this situation?","How would you handle a situation where you believe the doctor on your ward has made an incorrect decision about a patient’s care? When you question the doctor they refuse to admit they have made a mistake. What would you do now?","You believe one of your colleagues has made an error whilst administering a medication and has potentially given the wrong medication to the wrong patient. How would you deal with this situation?","Describe a time you have worked as part of a multi-disciplinary team to achieve a common goal.","Describe a time when you anticipated potential problems with a patient and initiated preventative measures. ","Describe a situation when you had to work closely with a difficult colleague. How did you handle the situation? Were you able to build a relationship with this person?","Talk about a time where you have had conflict with another member of your team. What was the conflict and how did you handle it?","Describe a time when you were particularly proud of your healthcare team? What was your role in this situation? ","Tell us about a time you stepped into a leadership role.","What approach do you take in communicating with people who do not know medical jargon? Give an example of a time you adapted your communication style to accomodate this.","Describe a time you have provided education to either a patient or their family member","Give an example of a time you had to interact with a hostile patient. How did you handle the situation and what was the outcome? ","Describe a time you were faced with a patient who chose not to communicate or disclose important information. How did you handle the situation and what was the outcome? ","Describe a time you made an error and how you rectified the mistake and learned from it.","Tell us about a time you were under a lot of pressure. What was going on, and how did you get through it? ","Tell me about a time when you didn’t know the answer to something at work? How did you go about finding the information?","Give me an example of an difficult situation at work. How did you remove yourself from the situation?  ","Tell me about a time you failed. How did you deal with this situation?","Describe your experience with a very ill patient who required a lot of your time. How did you manage this patient’s care while ensuring your other patients were adequately cared for? ","Describe a time you have felt overwhelmed by your work load. How did you deal with this situation?","Describe a time when you have succesfully persuaded a patient to agree to something they were initially hesitant about. How did you deal with the patients hesistations and persuade them?","Describe a time when you did not communicate well. How did you correct the situation?","Describe a time when you have gone above and beyond the requirements of your role.","Do you have any questions for us?"];
+	var text = "";
+	
+	
+		var qContainer = document.getElementById('qContainer');
+			for(var i=0; i<q.length; i++){
+			text += '<li class="list-group-item listQ" id="userList'+i+'"><p>'+q[i]+'</p></li><li id="q'+i+'" class="list-group-item"><button id="notebtn'+i+'"class="btn btnAddNote" data-toggle="collapse" data-target="#collapse'+i+'">Notes<span class="glyphicon glyphicon-plus"></span></button><button type="button" class="btn btn-primary btnFav" onclick="favouriteQ('+i+')">Favourite&nbsp;&nbsp;<span class="glyphicon glyphicon-star-empty" id="emptystar'+i+'"></span></button><br><br><div id="collapse'+i+'" class="collapse"><textarea id="t'+i+'"class="textInput" placeholder="Add question note here..."></textarea><button type="button" class="btn btn-block btnSave" onclick="save('+i+')">Save Note</button><button type="button" class="btn btn-block btnDel" onclick="deleteNote('+i+')">Delete Note</button></li>'
+		}
+		var userQtxt = "";
+		var userQArr = localStorage.getItem('storedUserQ');
+		userQArr = JSON.parse(userQArr);
+		if(userQArr != null){
+			for(var i=0; i < userQArr.length; i++){
+				userQtxt += '<li class="list-group-item listQ" id="userQlist'+i+'">'+userQArr[i]+'</li><li id="uq'+i+'" class="list-group-item"><button id="btnusernote'+i+'"class="btn btnAddNote" data-toggle="collapse" data-target="#collapseU'+i+'">Notes<span class="glyphicon glyphicon-plus"></span></button><button type="button" class="btn btn-primary btnFav" onclick="favouriteUQ('+i+')">Favourite&nbsp;&nbsp;<span class="glyphicon glyphicon-star-empty" id="Uemptystar'+i+'"></span></button><br><br><div id="collapseU'+i+'" class="collapse"><textarea id="uT'+i+'"class="textInput" placeholder="Add question note here..."></textarea><button type="button" class="btn btn-block btnSave" onclick="saveUser('+i+')">Save Note</button><button type="button" class="btn btn-block btnDel" onclick="deleteUserNote('+i+')">Delete Note</button><hr><button class="btn btn-block btn-danger" onclick="deleteUserQ('+i+')"><span class="glyphicon glyphicon glyphicon-trash"></span>Delete Question</button></li>'
+			}
+		}
+	function loadQuestions(input){
+		var favArray = getFavQ();
+		var favUserArray = getuserFavQ();
+		console.log(userQArr);
+		qContainer.innerHTML = text + userQtxt;
+
+		if(input == "my"){
+			for(var i = 0; i < q.length; i++){
+				document.getElementById("userList" + i).style.display = "none";
+				document.getElementById("q" + i).style.display = "none";
+			}
+		}if(input == "fav"){
+			for(var i = 0; i < userQArr.length; i++){
+				console.log(userQArr.length);
+				document.getElementById("userQlist" + i).style.display = "none";
+				document.getElementById("uq" + i).style.display = "none";
+			}
+			for(var i = 0; i < q.length; i++){
+				document.getElementById("userList" + i).style.display = "none";
+				document.getElementById("q" + i).style.display = "none";
+			}
+
+			for(var i = 0; i < favArray.length; i++){
+				document.getElementById("userList" + favArray[i]).style.display = "block";
+				document.getElementById("q" + favArray[i]).style.display = "block";	
+			}
+			for(var i = 0; i < favUserArray.length; i++){
+				document.getElementById("userQlist" + favUserArray[i]).style.display = "block";
+				document.getElementById("uq" + favUserArray[i]).style.display = "block";	
+			}
+		}
+		displayFavourites();
+		load();
+		loadUserNote();
+
+	}
+	loadQuestions()
+
+
+	function displayFavourites(){
+		var favArray = getFavQ();
+		console.log(favArray);
+		for(var i = 0; i < favArray.length; i++){
+			var star = document.getElementById('emptystar'+favArray[i]);
+			star.classList.remove('glyphicon-star-empty');
+			star.classList.add('glyphicon-star');
+			star.style.color = "yellow"
+		}
+		var favUserArray = getuserFavQ();
+		for(var i = 0; i < favUserArray.length; i++){
+			var ustar = document.getElementById('Uemptystar'+favUserArray[i]);
+			ustar.classList.remove('glyphicon-star-empty');
+			ustar.classList.add('glyphicon-star');
+			ustar.style.color = "yellow"
+		}
+	}
+	displayFavourites();
+
+	function favouriteQ(num){	
+		var star = document.getElementById('emptystar'+num);
+		var favStatus;		
+		if(star.classList.contains('glyphicon-star-empty')){
+			star.classList.remove('glyphicon-star-empty');
+			star.classList.add('glyphicon-star');
+			star.style.color = "yellow"
+			favStatus = true;
+		}else if(star.classList.contains('glyphicon-star')){
+			star.classList.remove('glyphicon-star');
+			star.classList.add('glyphicon-star-empty');
+			star.style.color = "white"
+			favStatus = false;
+		}
+
+		if(favStatus == true){
+			var favArr = getFavQ();
+			favArr.push(num);
+			favArr.sort();
+			localStorage.setItem('savedFavourites', JSON.stringify(favArr));
+			
+		}else if(favStatus == false){
+			var favArr = getFavQ();
+			var index = favArr.indexOf(num);
+			if (index > -1) {
+			  favArr.splice(index, 1);
+			}
+			localStorage.setItem('savedFavourites', JSON.stringify(favArr));
+		}
+		console.log(favArr);
+	}
+
+
+	function favouriteUQ(num){
+		var star = document.getElementById('Uemptystar'+num);
+		var favStatus;
+		if(star.classList.contains('glyphicon-star-empty')){
+			star.classList.remove('glyphicon-star-empty');
+			star.classList.add('glyphicon-star');
+			star.style.color = "yellow";
+			favStatus = true;
+		}else if(star.classList.contains('glyphicon-star')){
+			star.classList.remove('glyphicon-star');
+			star.classList.add('glyphicon-star-empty');
+			star.style.color = "white";
+			favStatus = false;
+		}
+
+		if(favStatus == true){
+			var favArr = getuserFavQ();
+			favArr.push(num);
+			favArr.sort();
+			localStorage.setItem('savedUserFavourites', JSON.stringify(favArr));
+			
+		}else if(favStatus == false){
+			var favArr = getuserFavQ();
+			var index = favArr.indexOf(num);
+			if (index > -1) {
+			  favArr.splice(index, 1);
+			}
+			localStorage.setItem('savedUserFavourites', JSON.stringify(favArr));
+		}
+
+	}
+
+
+	
+
+	function addQuestion(){
+		var q = document.getElementById('newQInput').value;
+		console.log(q);
+		var userQ = getUserQ();
+		userQ.push(q);
+		localStorage.setItem('storedUserQ', JSON.stringify(userQ))
+			location.reload();
+
+	}
+	function save(num){
+		var input = document.getElementById('t'+num).value;
+		var sN = "question" + num;
+		sN = sN.toString();
+		console.log(input);
+		localStorage.removeItem(sN)
+		localStorage.setItem(sN , input);
+		toast();
+
+	}
+	function deleteNote(num){
+		if(confirm("Are you sure you want to delete this note?")){
+			var sN = "question" + num;
+			sN = sN.toString();
+			localStorage.removeItem(sN);
+			toastDel();
+		}else{
+			return;
+		}		
+	}
+	function saveUser(num){
+		var input = document.getElementById('uT'+num).value;
+		var sN = "userQuestion" + num;
+		sN = sN.toString();
+		console.log(input);
+		localStorage.removeItem(sN)
+		localStorage.setItem(sN , input);
+		toast();
+	}
+	function deleteUserNote(num){
+		if(confirm("Are you sure you want to delete this note?")){
+			var sN = "userQuestion" + num;
+			sN = sN.toString();
+			localStorage.removeItem(sN);
+			toastDel();
+		}else{
+			return;
+		}		
+	}
+
+	function deleteUserQ(num){
+		if(confirm("Are you sure you want to delete this question?")){
+			
+			var userArr = getUserQ();
+			userArr.splice(num, 1);
+      		localStorage.setItem('storedUserQ', JSON.stringify(userArr));
+      		var sN = "userQuestion" + num;
+			sN = sN.toString();
+			localStorage.removeItem(sN);
+			location.reload();
+		}else{
+			return;
+		}		
+	}
+	function toast(){
+		toastr.options = {
+		  "closeButton": false,
+		  "debug": false,
+		  "newestOnTop": false,
+		  "progressBar": false,
+		  "positionClass": "toast-bottom-center",
+		  "preventDuplicates": false,
+		  "onclick": null,
+		  "showDuration": "100",
+		  "hideDuration": "1000",
+		  "timeOut": "1000",
+		  "extendedTimeOut": "1000",
+		  "showEasing": "swing",
+		  "hideEasing": "linear",
+		  "showMethod": "fadeIn",
+		  "hideMethod": "fadeOut"
+		}
+		toastr.success('Save Sucessful');
+		setInterval(function(){location.reload()},1000);
+	}
+	function toastDel(){
+		toastr.options = {
+		  "closeButton": false,
+		  "debug": false,
+		  "newestOnTop": false,
+		  "progressBar": false,
+		  "positionClass": "toast-bottom-center",
+		  "preventDuplicates": false,
+		  "onclick": null,
+		  "showDuration": "100",
+		  "hideDuration": "1000",
+		  "timeOut": "1000",
+		  "extendedTimeOut": "1000",
+		  "showEasing": "swing",
+		  "hideEasing": "linear",
+		  "showMethod": "fadeIn",
+		  "hideMethod": "fadeOut"
+		}
+		toastr.error('Note Deleted');
+		setInterval(function(){location.reload()},1000);
+	}
+	function load(){
+		for(i=0; i <q.length; i++){
+			var sN = "question" + i;
+			sN = sN.toString();
+			var note = localStorage.getItem(sN);
+			document.getElementById('t'+i).value = note;
+			console.log(note)
+			if(note != null){
+				var noteBtn = document.getElementById("notebtn"+i);
+				noteBtn.style.backgroundColor = "green";
+				noteBtn.style.color = "white";
+			}
+		}	   
+	}
+	load();
+
+
+
+
+	function deleteFav(num){
+		var favArr = getFavQ();
+			var index = favArr.indexOf(num);
+			if (index > -1) {
+			  favArr.splice(index, 1);
+			}
+			localStorage.setItem('savedFavourites', JSON.stringify(favArr));
+			console.log(num);
+			document.getElementById('favouriteList'+num).style.opacity = 0.3;
+			
+	}
+	function deleteuFav(num){
+		var favArr = getuserFavQ();
+			var index = favArr.indexOf(num);
+			if (index > -1) {
+			  favArr.splice(index, 1);
+			}
+			localStorage.setItem('savedUserFavourites', JSON.stringify(favArr));
+			document.getElementById('favouriteUList'+num).style.opacity = 0.3;
+			
+	}
+
+	function loadUserNote(){
+		if(userQArr != null){
+			for(i=0; i <userQArr.length; i++){
+				var sN = "userQuestion" + i;
+				sN = sN.toString();
+				var note = localStorage.getItem(sN);
+				document.getElementById('uT'+i).value = note;
+				if(note != null){
+				var noteBtn = document.getElementById("btnusernote"+i);
+				noteBtn.style.backgroundColor = "green";
+				noteBtn.style.color = "white";
+			}
+			
+			}
+		}
+	}
+	loadUserNote();
+
+
+	
+
+	
+
+$(document).ready(function(){
+  $("#myInput").on("keyup", function() {
+    var value = $(this).val().toLowerCase();
+    $("#qContainer li").filter(function() {
+      $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+    });
+  });
+});
+
+	
+</script>
+</body>
+</html>
