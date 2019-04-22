@@ -119,6 +119,7 @@
 
 <script type="text/javascript">
 
+
 	function getUserQ(){
 		var userQ = new Array;
 		var userQ_str = localStorage.getItem('storedUserQ');
@@ -180,7 +181,6 @@
 				document.getElementById("userList" + i).style.display = "none";
 				document.getElementById("q" + i).style.display = "none";
 			}
-
 			for(var i = 0; i < favArray.length; i++){
 				document.getElementById("userList" + favArray[i]).style.display = "block";
 				document.getElementById("q" + favArray[i]).style.display = "block";	
@@ -200,6 +200,7 @@
 
 	function displayFavourites(){
 		var favArray = getFavQ();
+
 		console.log(favArray);
 		for(var i = 0; i < favArray.length; i++){
 			var star = document.getElementById('emptystar'+favArray[i]);
@@ -208,8 +209,11 @@
 			star.style.color = "yellow"
 		}
 		var favUserArray = getuserFavQ();
+	
 		for(var i = 0; i < favUserArray.length; i++){
 			var ustar = document.getElementById('Uemptystar'+favUserArray[i]);
+			console.log(favUserArray[i])
+			
 			ustar.classList.remove('glyphicon-star-empty');
 			ustar.classList.add('glyphicon-star');
 			ustar.style.color = "yellow"
@@ -335,6 +339,7 @@
 	}
 
 	function deleteUserQ(num){
+		console.log(num);
 		if(confirm("Are you sure you want to delete this question?")){
 			
 			var userArr = getUserQ();
@@ -344,10 +349,19 @@
 			sN = sN.toString();
 			localStorage.removeItem(sN);
 			location.reload();
+
+			var favArr = getuserFavQ();
+			var index = favArr.indexOf(num);
+			if (index > -1) {
+			  favArr.splice(index, 1);
+			}
+			localStorage.setItem('savedUserFavourites', JSON.stringify(favArr));
+
 		}else{
 			return;
 		}		
 	}
+
 	function toast(){
 		toastr.options = {
 		  "closeButton": false,
@@ -409,27 +423,7 @@
 
 
 
-	function deleteFav(num){
-		var favArr = getFavQ();
-			var index = favArr.indexOf(num);
-			if (index > -1) {
-			  favArr.splice(index, 1);
-			}
-			localStorage.setItem('savedFavourites', JSON.stringify(favArr));
-			console.log(num);
-			document.getElementById('favouriteList'+num).style.opacity = 0.3;
-			
-	}
-	function deleteuFav(num){
-		var favArr = getuserFavQ();
-			var index = favArr.indexOf(num);
-			if (index > -1) {
-			  favArr.splice(index, 1);
-			}
-			localStorage.setItem('savedUserFavourites', JSON.stringify(favArr));
-			document.getElementById('favouriteUList'+num).style.opacity = 0.3;
-			
-	}
+	
 
 	function loadUserNote(){
 		if(userQArr != null){
